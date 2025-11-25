@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Workout Hub — Responsive</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    /* =========================
+       Root & Global
+       ========================= */
+    :root{
+      --bg1: #f2f2f2;
+      --bg2: #e6f7ff;
+      --accent: #1cb5e0;
+      --dark: #000851;
+      --muted: #6b6b6b;
+      --gold: #ffcc00;
+      --radius: 12px;
+      --content-max: 1200px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      font-family:"Roboto",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      background: linear-gradient(90deg,var(--bg1),var(--bg2));
+      color:#222;
+      max-width:100%;
+      overflow-x:hidden; /* prevent horizontal scroll */
+    }
+
+    /* Background image applied at large screens only (prevents overflow on mobile) */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      background-image:url("workout.png");
+      background-repeat:no-repeat;
+      background-position:center center;
+      background-size:cover;
+      opacity:0.08;
+      pointer-events:none;
+      display:none;
+    }
+    @media(min-width:1024px){
+      body::before{ display:block; opacity:0.12; }
+    }
+
+    a{color:var(--accent); text-decoration:none; position:relative;}
+    a:hover{color:var(--gold);}
+    a::after{
+      content:''; position:absolute; left:0; right:0; bottom:-3px; height:2px;
+      background:var(--gold); transform:scaleX(0); transform-origin:center; transition:transform .22s ease;
+    }
+    a:hover::after{ transform:scaleX(1); }
+
+    /* Container sizing */
+    .container-max{
+      width:100%;
+      max-width:var(--content-max);
+      margin-left:auto;
+      margin-right:auto;
+      padding-left:1rem;
+      padding-right:1rem;
+    }
+
+    /* =========================
+       Header
+       ========================= */
+    header{
+      background: linear-gradient(90deg,var(--accent),var(--dark));
+      color:#fff;
+      padding:.9rem 1rem;
+      display:flex;
+      align-items:center;
+      gap:1rem;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .brand {
+      display:flex; align-items:center; gap:.6rem;
+    }
+    .brand h1{ font-size:1.05rem; margin:0; font-weight:700; letter-spacing:.2px; }
+    nav.desktop-nav a{ color:#fff; margin-left:1.1rem; font-weight:500; }
+    nav.desktop-nav a.active{ color:var(--gold); border-bottom:2px solid var(--gold); padding-bottom:.25rem; }
+
+    /* Collapsed mobile header icon group */
+    .header-right { display:flex; gap:.6rem; align-items:center; }
+    .header-right .icon-btn{ color:#fff; font-size:1.05rem; }
+
+    /* =========================
+       Page Title / Main
+       ========================= */
+    main{ padding:1.5rem 0; flex:1; }
+    h1.page-title{ text-align:center; color:var(--accent); margin: .1rem 0 1rem; font-size:1.6rem; }
+
+    /* =========================
+       Carousel (hero)
+       ========================= */
+    .hero-carousel{ margin:1rem auto 1.6rem; border-radius:var(--radius); overflow:hidden; background:transparent; }
+    .carousel-card{
+      background: rgba(255,255,255,0.95);
+      border-radius:10px;
+      padding:.85rem;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      gap:.45rem;
+      align-items:stretch;
+      justify-content:flex-start;
+      box-shadow:0 6px 18px rgba(15,18,30,0.06);
+    }
+    .carousel-card img{ width:100%; height:150px; object-fit:cover; border-radius:8px; display:block; }
+    .carousel-card h6, .carousel-card h5{ margin:0; color:var(--accent); font-weight:700; font-size:1rem; }
+    .carousel-card p{ margin:0; color:var(--muted); font-size:.9rem; line-height:1.2; }
+
+    /* make carousel cards smaller on small screens */
+    @media(max-width:768px){
+      .carousel-card img{ height:120px; }
+      .carousel-card h6{ font-size:.98rem; }
+    }
+    @media(max-width:420px){
+      .carousel-card img{ height:100px; }
+      .carousel-card p{ font-size:.85rem; }
+    }
+
+    /* =========================
+       Workout Grid
+       ========================= */
+    .workout-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-bottom:2rem; }
+    .workout-card{
+      background:rgba(255,255,255,0.95);
+      border-radius:10px; overflow:hidden;
+      box-shadow:0 8px 20px rgba(10,12,30,0.06);
+      transition:transform .25s ease, box-shadow .25s ease;
+      display:flex; flex-direction:column;
+      height:100%;
+    }
+    .workout-card img{ display:block; width:100%; height:180px; object-fit:cover; }
+    .card-body{ padding:1rem; display:flex; flex-direction:column; gap:.5rem; flex:1; }
+    .workout-card h5{ margin:0; color:var(--accent); font-size:1.05rem; }
+    .workout-card p{ margin:0; color:var(--muted); font-size:.95rem; line-height:1.25; flex:1; }
+    .workout-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(10,12,30,0.1); }
+
+    /* grid responsiveness */
+    @media(max-width:992px){ .workout-grid{ grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:600px){ .workout-grid{ grid-template-columns:1fr; } .workout-card img{ height:150px; } }
+
+    /* =========================
+       Login Overlay
+       ========================= */
+    #loginOverlay{
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background:rgba(0,0,0,0.7); z-index:1050; opacity:0; pointer-events:none; transition:opacity .35s ease;
+    }
+    #loginOverlay.active{ opacity:1; pointer-events:auto; }
+    .login-container{
+      width:min(92%,420px); background:#fff; border-radius:12px; padding:1.4rem; box-shadow:0 18px 40px rgba(0,0,0,0.25);
+      transform:translateY(18px); transition:transform .35s ease, opacity .35s ease; opacity:0;
+    }
+    #loginOverlay.active .login-container{ transform:none; opacity:1; }
+    .login-container h3{ color:var(--accent); margin-bottom:1rem; text-align:center; }
+    .login-container input[type="text"], .login-container input[type="password"]{
+      width:100%; padding:.7rem; margin-bottom:.8rem; border-radius:8px; border:1px solid #e2e2e2;
+    }
+    .login-container button{ width:100%; padding:.8rem; border-radius:8px; border:none; background:var(--accent); color:#fff; font-weight:700; cursor:pointer; }
+
+    /* =========================
+       Bottom nav (mobile)
+       ========================= */
+    .bottom-nav{ display:none; }
+    @media(max-width:768px){
+      nav.desktop-nav{ display:none; }
+      .bottom-nav{ display:flex; position:fixed; left:0; right:0; bottom:0; z-index:1040;
+        background: linear-gradient(90deg,var(--accent),var(--dark)); justify-content:space-around; padding:.55rem 0; box-shadow:0 -6px 18px rgba(0,0,0,0.12); }
+      .bottom-nav a{ color:#fff; font-size:.85rem; text-align:center; flex:1; padding:.1rem .2rem; display:block; }
+      .bottom-nav a i{ display:block; font-size:1.25rem; margin-bottom:.15rem; }
+      body{ padding-bottom:64px; } /* leave space for nav */
+    }
+
+    /* =========================
+       Footer
+       ========================= */
+    footer{
+      background: linear-gradient(90deg,var(--accent),var(--dark));
+      color:#fff; padding:1.5rem 1rem; margin-top:1.5rem;
+    }
+    .footer-inner{ display:flex; gap:2rem; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; max-width:var(--content-max); margin:0 auto; }
+    .footer-col{ min-width:180px; }
+    .footer-col h4{ margin:0 0 .7rem 0; color:var(--gold); font-size:1.05rem; }
+    .footer-bottom{ width:100%; text-align:center; margin-top:1rem; opacity:.95; border-top:white; padding-top:.8rem; font-size:.92rem; color:#fff; }
+
+
+    /* Small utilities */
+    .muted{ color:var(--muted); font-size:.95rem; }
+    .sr-only{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+
+  </style>
+</head>
+<body>
+    <!-- Login Overlay -->
+<div id="loginOverlay">
+  <div class="login-container">
+    <h3>Login to Your Account</h3>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <label class="remember-me">
+        <input type="checkbox" id="rememberMe" /> Remember Me
+      </label>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>
+
+
+  <!-- HEADER -->
+  <header class="container-max" role="banner">
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path fill="#fff" d="M12 2L3 7v6c0 5 3.9 9.3 9 9.9 5.1-.6 9-4.9 9-9.9V7l-9-5z"></path>
+      </svg>
+      <h1>Workout Hub</h1>
+    </div>
+
+    <nav class="desktop-nav" role="navigation" aria-label="main navigation">
+      <a href="index.html" class="active" aria-current="page">Home</a>
+      <a href="workouts.html">Workouts</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="profile.html" title="Profile"><i class="fas fa-user"></i></a>
+    </nav>
+
+  </header>
+
+  <!-- MAIN -->
+  <main class="container-max" role="main">
+    <h1 class="page-title">Welcome to Workout Hub</h1>
+
+    <!-- HERO CAROUSEL -->
+    <section class="hero-carousel" aria-label="Featured workouts">
+      <div id="muscleCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+        <div class="carousel-inner">
+
+          <!-- Slide 1: Chest -->
+          <div class="carousel-item active">
+            <div class="row gx-3 gy-3 py-4">
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/push up.jpg" alt="Push-ups — Chest exercise">
+              <h5>Push-ups</h5>
+              <p>3 sets of 15 reps — Compound bodyweight exercise targeting chest, shoulders, and triceps. Enhances upper body endurance and stability.</p>
+            </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/bench press.jpg" alt="Bench Press">
+              <h5>Bench Press</h5>
+              <p>4 sets until failure — Classic compound lift for maximal chest, shoulder, and tricep development. Focus on controlled descent and explosive press.</p>
+            </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/dumbell press.jpg" alt="Dumbbell Press">
+              <h5>Dumbbell Bench Press</h5>
+              <p>4 sets until failure — Promotes chest symmetry and stabilizer engagement. Allows greater range of motion than barbell press.</p>
+            </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2: Back -->
+          <div class="carousel-item">
+            <div class="row gx-3 gy-3 py-4">
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/Cable row.jpg" alt="Cable Row">
+              <h5>Cable Row</h5>
+              <p>4 sets until failure — Engages mid-back and traps. Keep chest upright and pull towards lower abdomen for optimal contraction.</p>
+            </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/tbar row.jpg" alt="T-Bar Row">
+              <h5>T-Bar Row</h5>
+              <p>3 sets of 12 reps — Builds mid and upper back mass. Focus on controlled pull and full range of motion.</p>
+            </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/lat pulldown.jpg" alt="Lat Pull Down">
+              <h5>Lat Pulldown</h5>
+              <p>4 sets until failure — Strengthens lats and upper back. Emphasize full contraction and slow eccentric control.</p>
+            </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 3: Shoulders -->
+          <div class="carousel-item">
+            <div class="row gx-3 gy-3 py-4">
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/reverse fly.jpg" alt="Reverse Fly">
+              <h5>Reverse Fly</h5>
+              <p>3 sets until failure — Strengthens rear delts and upper back. Slow, controlled movements maximize engagement.</p>
+            </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/overhead press.jpg" alt="Overhead Press">
+              <h5>Overhead Press</h5>
+              <p>3 sets until failure — Builds overall shoulder strength and stability. Engage core for proper posture.</p>
+            </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/arnold press.jpg" alt="Arnold Press">
+              <h5>Arnold Press</h5>
+              <p>3 sets until failure — Targets anterior and lateral delts. Full rotation engages all heads of the shoulder.</p>
+            </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 4: Triceps -->
+          <div class="carousel-item">
+            <div class="row gx-3 gy-3 py-4">
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/cable tricep pulldown.jpg" alt="Cable Tricep Pulldown">
+              <h5>Cable Tricep Pulldown</h5>
+              <p>4 sets until failure — Provides constant tension for triceps. Maintain elbow position and slow controlled movement.</p>
+            </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/dumbell tricep extension.jpg" alt="Dumbbell Tricep Extension">
+              <h5>Dumbbell Tricep Extension</h5>
+              <p>4 sets until failure — Overhead isolation for triceps long head. Keep core tight and avoid arching lower back.</p>
+            </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/kickback.jpg" alt="Tricep Kickback">
+              <h5>Tricep Kickback</h5>
+              <p>3 sets until failure — Isolation movement to improve tricep definition. Keep elbow stationary and fully extend arm.</p>
+            </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 5: Core -->
+          <div class="carousel-item">
+            <div class="row gx-3 gy-3 py-4">
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/planks.jpg" alt="Plank">
+                  <h5>Plank</h5>
+                  <p>4 sets of 120 seconds — Static core stabilization exercise. Engage abs, glutes, and back. Maintain straight line from head to heels.</p>
+               </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/russian twist.jpg" alt="Russian Twist">
+                  <h5>Russian Twists</h5>
+                  <p>4 sets of 30 reps per side — Rotational exercise activating obliques. Maintain neutral spine and slow rotation.</p>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="carousel-card">
+                  <img src="pictures/bicycle crunches.jpg" alt="Bicycle Crunches">
+                  <h5>Bicycle Crunches</h5>
+                  <p>4 sets of 30 reps per side — Oblique-focused abdominal exercise. Slow controlled movement maximizes engagement.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#muscleCarousel" data-bs-slide="prev" aria-label="Previous">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#muscleCarousel" data-bs-slide="next" aria-label="Next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Our Workouts -->
+    <section aria-labelledby="our-workouts">
+      <h2 id="our-workouts" style="text-align:center;color:var(--accent);margin-bottom:1.25rem;">Our Workouts</h2>
+      <div class="workout-grid" id="workoutGrid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav" aria-label="mobile navigation">
+    <a href="index.html" class="active"><i class="fas fa-home"></i><small>Home</small></a>
+    <a href="workouts.html"><i class="fas fa-dumbbell"></i><small>Workouts</small></a>
+    <a href="about.html"><i class="fas fa-info-circle"></i><small>About</small></a>
+    <a href="contact.html"><i class="fas fa-envelope"></i><small>Contact</small></a>
+    <a href="profile.html"><i class="fas fa-user"></i><small>Profile</small></a>
+  </nav>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul style="list-style:none;padding:0;margin:0;">
+          <li><a href="index.html" style="color:#fff"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="workouts.html" style="color:#fff"><i class="fas fa-dumbbell"></i> Workouts</a></li>
+          <li><a href="about.html" style="color:#fff"><i class="fas fa-info-circle"></i> About</a></li>
+          <li><a href="contact.html" style="color:#fff"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <ul style="list-style:none;padding:0;margin:0;">
+          <li class="muted"style="color:#fff"><i class="fas fa-phone"></i> +63 912 345 6789</li>
+          <li class="muted"style="color:#fff"><i class="fas fa-envelope"></i> workout@hub.com</li>
+          <li><a href="#" style="color:#fff"><i class="fab fa-facebook"></i> Facebook</a></li>
+          <li><a href="#" style="color:#fff"><i class="fab fa-instagram"></i> Instagram</a></li>
+        </ul>
+      </div>
+
+      <div style="flex:1"></div>
+
+      <div class="footer-bottom">© 2025 Workout Hub — All Rights Reserved</div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* =========================
+       JS: DOM Ready
+       ========================= */
+    (function(){
+      // Workout Data
+      const workouts = [
+        {title:'Push-ups', description:'3 sets of 15 reps — Chest, shoulders, triceps.', image:'pictures/push up.jpg'},
+        {title:'Squats', description:'4 sets of 12 reps — Glutes and quads.', image:'pictures/front squats.jpg'},
+        {title:'Bench Press', description:'4 sets of 10 reps — Chest and arms.', image:'pictures/bench press.jpg'},
+        {title:'Lunges', description:'3 sets of 10 reps per leg — Balance and legs.', image:'pictures/leg lunges.jpg'},
+        {title:'Plank', description:'3 sets × 45 sec — Core stability.', image:'pictures/planks.jpg'},
+        {title:'Deadlift', description:'3 sets × 8 reps — Hamstrings and glutes.', image:'pictures/deadlift.jpg'},
+        {title:'Russian Twist', description:'3 sets × 20 reps — Obliques.', image:'pictures/russian twist.jpg'},
+        {title:'Pull-ups', description:'3 sets max — Back and biceps.', image:'pictures/pulll ups.jpg'},
+        {title:'Bicycle Crunches', description:'3 sets × 20 reps — Abs and core.', image:'pictures/crunches.jpg'},
+      ];
+
+      // Render workout cards
+      const workoutGrid = document.getElementById('workoutGrid');
+      workouts.forEach(w => {
+        const card = document.createElement('article');
+        card.className = 'workout-card';
+        card.innerHTML = `
+          <img src="${w.image}" alt="${w.title}">
+          <div class="card-body">
+            <h5>${w.title}</h5>
+            <p>${w.description}</p>
+          </div>`;
+        workoutGrid.appendChild(card);
+      });
+
+      // Login overlay
+      const overlay = document.getElementById('loginOverlay');
+      const loginForm = document.getElementById('loginForm');
+
+      overlay.addEventListener('click', function(e){
+        if(e.target === overlay) { overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); }
+      });
+
+      loginForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const username = (document.getElementById('username')||{}).value || '';
+        if(document.getElementById('rememberMe').checked){
+          localStorage.setItem('rememberedUser', username);
+        } else {
+          localStorage.removeItem('rememberedUser');
+        }
+        overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true');
+      });
+
+      // Initialize carousel for good measure (Bootstrap auto init is fine too)
+      const carouselEl = document.getElementById('muscleCarousel');
+      if(carouselEl && typeof bootstrap !== 'undefined'){
+        const carousel = bootstrap.Carousel.getOrCreateInstance(carouselEl, {
+          interval: 4500,
+          pause: false,
+          wrap: true
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

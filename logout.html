@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logged Out - Workout Hub</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#f7faff,#e0f7ff);
+    margin: 0;
+  }
+  .logout-box {
+    text-align: center;
+    background: rgba(255,255,255,0.95);
+    padding: 2.5rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    max-width: 450px;
+  }
+  .logout-box h2 {
+    color: #000851;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+  }
+  .logout-box p {
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    color: #222;
+    line-height: 1.5;
+  }
+  .logout-box button {
+    display: inline-block;
+    padding: 0.8rem 2.2rem;
+    background: linear-gradient(90deg, #1cb5e0, #000851);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .logout-box button:hover {
+    background: linear-gradient(90deg, #000851, #1cb5e0);
+  }
+</style>
+</head>
+<body>
+  <div class="logout-box">
+    <h2>You Have Been Logged Out</h2>
+    <p>Thank you for visiting Workout Hub. Click below to log in again.</p>
+    <button id="logoutBtn">Go to Login Page</button>
+  </div>
+
+<script>
+  // Clear remembered user immediately
+  localStorage.removeItem('rememberedUser');
+
+  // Event handler for logout button
+  document.getElementById('logoutBtn').addEventListener('click', function(){
+    // Force redirect to login page
+    window.location.href = 'login2.html';
+  });
+
+  // Optional: force redirect automatically after 1 second
+  setTimeout(() => {
+    window.location.href = 'login2.html';
+  }, 1000);
+</script>
+</body>
+</html>

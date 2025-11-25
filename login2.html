@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Workout Hub</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg,#f7faff,#e0f7ff);
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .container {
+        background: white;
+        padding: 45px;
+        width: 350px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    h2 { margin-bottom: 20px; color: #000851; }
+    input {
+        width: 92.5%;
+        padding: 11px;
+        margin: 8px 0;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        font-size: 15px;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 15px;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+    button:hover { background: #555; }
+    .register-link {
+        margin-top: 15px;
+        font-size: 14px;
+    }
+    .register-link a { color: #ff8080; text-decoration: none; font-weight: bold; }
+    .register-link a:hover { text-decoration: underline; color: #ff4d4d; }
+    label { font-size: 14px; display: block; margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+        <button type="submit">Login</button>
+    </form>
+    <div class="register-link">
+        Don't have an account? <a href="signup.html">Sign Up</a>
+    </div>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const remember = document.getElementById('rememberMe').checked;
+
+    // Store user in localStorage if "Remember Me" is checked
+    if(remember){
+        localStorage.setItem('rememberedUser', email);
+    }
+
+    // Always redirect to homepage
+    window.location.href = "index.html";
+});
+</script>
+
+</body>
+</html>

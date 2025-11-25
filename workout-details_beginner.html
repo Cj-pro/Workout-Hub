@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workout Hub - Workout Details</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+    body {
+      background: linear-gradient(to right, #f2f2f2, #e6f7ff);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+      background-attachment: fixed;
+    }
+    /* Back to Workouts Button */
+a.btn-back {
+  justify-content: center;
+  padding: 10px 20px;
+  background: #ffcc00; /* bright yellow */
+  color: #000; /* black text */
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  display: block;
+  margin-top: 5px;
+  width: 200px;
+}
+
+a.btn-back i {
+  margin-right: 8px;
+}
+
+a.btn-back:hover {
+  background: #e6b800; /* slightly darker on hover */
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.btn-container {
+    display: flex;
+    justify-content: center; /* This centers the children (the button) */
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+        nav a {
+      text-decoration: none;
+      color: #1cb5e0;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffcc00;
+    }
+nav a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #ffcc00;
+  left: 0;
+  bottom: -2px; /* slightly below text */
+  transform: scaleX(0);
+  transform-origin: center; /* start from center */
+  transition: transform 0.3s ease;
+}
+
+nav a:hover::after {
+  transform: scaleX(1); /* expand fully */
+}
+    header {
+      background: linear-gradient(90deg, #1cb5e0, #000851);
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 1.8rem; }
+                .brand {
+      display:flex; align-items:center; gap:.6rem;
+    }
+    .brand h1{ font-size:1.05rem; margin:0; font-weight:700; letter-spacing:.2px; }
+        nav.desktop-nav a{ color:#fff; margin-left:1.1rem; font-weight:500; }
+    nav.desktop-nav a.active{ color:var(--gold); border-bottom:2px solid var(--gold); padding-bottom:.25rem; }
+        /* Collapsed mobile header icon group */
+    .header-right { display:flex; gap:.6rem; align-items:center; }
+    .header-right .icon-btn{ color:#fff; font-size:1.05rem; }
+    nav a { margin-left: 1.5rem; color: #fff; font-weight: 500; text-decoration: none; }
+    nav a:hover { color: #ffcc00; }
+    main { flex: 1; padding: 2rem; }
+    .hero {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: url('https://images.unsplash.com/photo-1594737625785-dfbd5a9928c3?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      color: #050505;
+      position: relative;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      font-weight: bold;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top:0; left:0; width:100%; height:100%;
+      background-color: rgb(104, 204, 244);
+      z-index: 0;
+    }
+    .hero h2, .hero p { position: relative; z-index: 1; }
+    .workout-card {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(1px);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      color: #0b0b0b;
+      margin: 0 auto 2rem auto;
+      max-width: 800px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    h4{
+      color: black;
+      font-weight: bold;
+      text-align: center;
+    }
+    .workout-card:hover { transform: translateY(-6px); box-shadow: 0 15px 25px rgba(0,0,0,0.3); }
+    .workout-card h3 { color: #1cb5e0; margin-bottom: 1rem; }
+    .workout-card p { line-height: 1.6; margin-bottom: 1rem; }
+
+    .workout-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .workout-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .workout-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    }
+
+    .workout-item img {
+      width: 220px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .workout-info { flex: 1; }
+    .workout-info h5 { margin-bottom: 0.5rem; color: #1cb5e0; }
+    .workout-info p { margin: 0; line-height: 1.5; }
+
+    footer {
+      background: linear-gradient(90deg, #1cb5e0, #000851);
+      color: #fff;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      text-align: left;
+    }
+    /* Mobile bottom nav */
+.bottom-nav { 
+    display:none; /* HIDDEN on desktop screens */
+}
+
+@media (max-width:768px) {
+    /* 1. Hide the top desktop navigation */
+    header nav { 
+        display:none; 
+    }
+
+    /* 2. Show the bottom mobile navigation */
+    .bottom-nav {
+        display:flex; /* SHOW the bottom nav */
+        justify-content:space-around; 
+        align-items:center;
+        position:fixed; 
+        bottom:0; 
+        left:0; 
+        width:100%;
+        background: linear-gradient(90deg, #1cb5e0, #000851); 
+        padding:0.6rem 0;
+        box-shadow:0 -2px 5px rgba(0,0,0,0.2); 
+        z-index:9999;
+    }
+
+    /* 3. Add space at the bottom of the body so content isn't covered by the fixed nav */
+    body { 
+        padding-bottom:60px; 
+    }
+
+    /* Other styles for the bottom nav appearance: */
+    .bottom-nav a { 
+        color:#fff; 
+        text-align:center; 
+        font-size:0.85rem; 
+        flex:1; 
+    }
+    .bottom-nav a i { 
+        display:block; 
+        font-size:1.4rem; 
+        margin-bottom:0.2rem; 
+    }
+    .bottom-nav a.active, .bottom-nav a:hover { 
+        color:#ffcc00; 
+    }
+}
+    footer h4 { margin-bottom: 1rem; font-size: 1.2rem; color: #ffcc00; }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 0.5rem; }
+    footer ul li a { color: #fff; transition: 0.3s; text-decoration: none; }
+    footer ul li a:hover { color: #ffcc00; }
+    .footer-bottom { width: 100%; text-align: center; margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 1rem; font-size: 0.9rem; }
+  .modal-dialog {
+  max-width: 95%;
+  margin: 1.5rem auto;
+}
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-body {
+  padding: 1rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.workout-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.workout-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.workout-info h5 {
+  margin: 0 0 0.25rem 0;
+}
+.muscle-group {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #e50914;
+}
+@media (max-width: 768px) {
+  .workout-item {
+    flex-direction: column;
+    align-items: center;
+  }
+  .workout-item img {
+    width: 80%;
+    height: auto;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="container-max" role="banner">
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path fill="#fff" d="M12 2L3 7v6c0 5 3.9 9.3 9 9.9 5.1-.6 9-4.9 9-9.9V7l-9-5z"></path>
+      </svg>
+      <h1>Workout Hub</h1>
+    </div>
+
+    <nav class="desktop-nav" role="navigation" aria-label="main navigation">
+      <a href="index.html"  aria-current="page">Home</a>
+      <a href="workouts.html"class="active">Workouts</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="profile.html" title="Profile"><i class="fas fa-user"></i></a>
+    </nav>
+
+  </header>
+
+<main>
+  <section class="hero">
+    <h2>Workout Details Beginner Level</h2>
+    <p>Learn more about these workout programs that is specific for Beginner workouts and follow them safely.</p>
+  </section>
+
+  <!-- Workout Cards -->
+  <div class="workout-card" data-bs-toggle="modal" data-bs-target="#upperBodyModal">
+    <h3>Upper Body Strength</h3>
+    <p>Build muscle and power in your chest, arms, and shoulders with this targeted routine.</p>
+  </div>
+
+  <div class="workout-card" data-bs-toggle="modal" data-bs-target="#legDayModal">
+    <h3>Leg Day</h3>
+    <p>Focus on your lower body with this combination of strength and endurance exercises.</p>
+  </div>
+
+  <div class="workout-card" data-bs-toggle="modal" data-bs-target="#coreModal">
+    <h3>Core Stability</h3>
+    <p>Strengthen your abs, obliques, and back muscles for a stronger, more balanced core.</p>
+  </div>
+</main>
+
+<!-- =================== UPPER BODY MODAL =================== -->
+<div class="modal fade" id="upperBodyModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Upper Body Strength Workouts</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+        <div class="workout-list">
+
+          <!-- === CHEST === -->
+          <h4 class="muscle-group">Chest</h4>
+          <div class="workout-item">
+            <img src="pictures/push up.jpg">
+            <div class="workout-info">
+              <h5>Push-ups</h5>
+              <p>3 sets of 15 reps — Compound bodyweight exercise targeting chest, shoulders, and triceps. Enhances upper body endurance and stability.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/bench press.jpg">
+            <div class="workout-info">
+              <h5>Bench Press</h5>
+              <p>4 sets of 10 reps — Classic compound lift for maximal chest, shoulder, and tricep development. Focus on controlled descent and explosive press.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/dumbell press.jpg">
+            <div class="workout-info">
+              <h5>Dumbbell Bench Press</h5>
+              <p>4 sets of 10 reps — Promotes chest symmetry and stabilizer engagement. Allows greater range of motion than barbell press.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/decline.jpg">
+            <div class="workout-info">
+              <h5>Decline Bench Press</h5>
+              <p>4 sets of 10 reps — Emphasizes lower chest fibers. Maintain proper arch and controlled motion to prevent shoulder strain.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/pec dec.jpg">
+            <div class="workout-info">
+              <h5>Pec Dec Fly</h5>
+              <p>4 sets of 10 reps — Isolation movement to maximize chest contraction and hypertrophy. Slow eccentric phase recommended.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/cable fly.jpg">
+            <div class="workout-info">
+              <h5>Cable Fly</h5>
+              <p>3 sets of 12 reps — Targets chest with constant tension. Focus on midline squeeze and controlled return.</p>
+            </div>
+          </div>
+
+          <!-- === BACK === -->
+          <h4 class="muscle-group">Back</h4>
+          <div class="workout-item">
+            <img src="pictures/lat pulldown.jpg">
+            <div class="workout-info">
+              <h5>Lat Pulldown</h5>
+              <p>4 sets of 10 reps — Strengthens lats and upper back. Emphasize full contraction and slow eccentric control.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/barbel row.jpg">
+            <div class="workout-info">
+              <h5>Barbell Row</h5>
+              <p>4 sets of 10 reps — Compound movement for mid-back thickness. Maintain flat back and controlled rowing motion.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/Cable row.jpg">
+            <div class="workout-info">
+              <h5>Cable Row</h5>
+              <p>4 sets of 10 reps — Engages mid-back and traps. Keep chest upright and pull towards lower abdomen for optimal contraction.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/tbar row.jpg">
+            <div class="workout-info">
+              <h5>T-Bar Row</h5>
+              <p>3 sets of 12 reps — Builds mid and upper back mass. Focus on controlled pull and full range of motion.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/pulll ups.jpg">
+            <div class="workout-info">
+              <h5>Pull-ups</h5>
+              <p>3 sets to failure — Develops lats, biceps, and upper body width. Use weighted variations for advanced overload.</p>
+            </div>
+          </div>
+
+          <!-- === SHOULDERS === -->
+          <h4 class="muscle-group">Shoulders</h4>
+          <div class="workout-item">
+            <img src="pictures/arnold press.jpg">
+            <div class="workout-info">
+              <h5>Arnold Press</h5>
+              <p>3 sets of 12 reps — Targets anterior and lateral delts. Full rotation engages all heads of the shoulder.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/lateral raise.jpg">
+            <div class="workout-info">
+              <h5>Lateral Raise</h5>
+              <p>3 sets of 15 reps — Isolation for side delts, enhancing shoulder width. Maintain slight bend in elbows.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/front raise.jpg">
+            <div class="workout-info">
+              <h5>Front Raise</h5>
+              <p>3 sets of 20 reps — Strengthens anterior delts. Avoid momentum and focus on controlled lift.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/reverse fly.jpg">
+            <div class="workout-info">
+              <h5>Reverse Fly</h5>
+              <p>3 sets of 12 reps — Strengthens rear delts and upper back. Slow, controlled movements maximize engagement.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/upright barbel row.jpg">
+            <div class="workout-info">
+              <h5>Upright Barbell Row</h5>
+              <p>4 sets of 10 reps — Targets traps and lateral delts. Keep elbows above wrists to avoid shoulder impingement.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/overhead press.jpg">
+            <div class="workout-info">
+              <h5>Overhead Press</h5>
+              <p>3 sets of 8 reps — Builds overall shoulder strength and stability. Engage core for proper posture.</p>
+            </div>
+          </div>
+
+          <!-- === BICEPS === -->
+          <h4 class="muscle-group">Biceps</h4>
+          <div class="workout-item">
+            <img src="pictures/bicep curls.jpg">
+            <div class="workout-info">
+              <h5>Bicep Curls</h5>
+              <p>3 sets of 12 reps — Isolation for biceps, emphasizing slow eccentric control and peak contraction.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/hammer curl.jpg">
+            <div class="workout-info">
+              <h5>Hammer Curl</h5>
+              <p>3 sets of 12 reps — Targets brachialis and forearms for thicker, more balanced arms.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/concentration curl.jpg">
+            <div class="workout-info">
+              <h5>Concentration Curl</h5>
+              <p>3 sets of 10 reps — Isolation for peak contraction, ideal for focused bicep hypertrophy.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/preacher curl.jpg">
+            <div class="workout-info">
+              <h5>Preacher Curl</h5>
+              <p>3 sets of 12 reps — Provides strict range of motion, minimizing cheating for maximum bicep engagement.</p>
+            </div>
+          </div>
+
+          <!-- === TRICEPS === -->
+          <h4 class="muscle-group">Triceps</h4>
+          <div class="workout-item">
+            <img src="pictures/bench dips.jpg">
+            <div class="workout-info">
+              <h5>Bench Dips</h5>
+              <p>3 sets of 12 reps — Compound tricep exercise. Lean forward slightly to target triceps fully; add weight for advanced overload.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/kickback.jpg">
+            <div class="workout-info">
+              <h5>Tricep Kickback</h5>
+              <p>3 sets of 15 reps — Isolation movement to improve tricep definition. Keep elbow stationary and fully extend arm.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/cable tricep pulldown.jpg">
+            <div class="workout-info">
+              <h5>Cable Tricep Pulldown</h5>
+              <p>4 sets of 10 reps — Provides constant tension for triceps. Maintain elbow position and slow controlled movement.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/dumbell tricep extension.jpg">
+            <div class="workout-info">
+              <h5>Dumbbell Tricep Extension</h5>
+              <p>4 sets of 10 reps — Overhead isolation for triceps long head. Keep core tight and avoid arching lower back.</p>
+            </div>
+          </div>
+
+          <!-- === FOREARMS === -->
+          <h4 class="muscle-group">Forearms</h4>
+          <div class="workout-item">
+            <img src="pictures/wrist curl dumbell.jpg">
+            <div class="workout-info">
+              <h5>Wrist Curl</h5>
+              <p>3 sets of 20 reps — Develops wrist flexors and grip strength. Perform slow, controlled movements for maximal effect.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/barbel reverse wrist curl.jpg">
+            <div class="workout-info">
+              <h5>Barbell Reverse Wrist Curl</h5>
+              <p>4 sets of 10 reps — Strengthens forearm extensors. Focus on slow eccentric for muscle activation.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/finger curls.webp">
+            <div class="workout-info">
+              <h5>Finger Curls</h5>
+              <p>4 sets of 10 reps — Isolates finger flexors, improving grip endurance and forearm definition.</p>
+            </div>
+          </div>
+          <div class="workout-item">
+            <img src="pictures/wrist curl dumbell.jpg">
+            <div class="workout-info">
+              <h5>Dumbbell Wrist Curls</h5>
+              <p>4 sets of 10 reps — Develops wrist strength and control. Maintain steady tempo and full range of motion.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== LEG DAY MODAL =================== -->
+<div class="modal fade" id="legDayModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Leg Day Workouts</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+        <div class="workout-list">
+
+          <h4 class="muscle-group">Leg Workouts</h4>
+
+          <div class="workout-item">
+            <img src="pictures/barbel lunges.jpg">
+            <div class="workout-info">
+              <h5>Barbell Lunges</h5>
+              <p>4 sets of 10 reps — Compound unilateral movement targeting quadriceps, glutes, and hamstrings. Enhances balance, hip stability, and functional strength.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/barbel squat.jpg">
+            <div class="workout-info">
+              <h5>Barbell Back Squat</h5>
+              <p>4 sets of 10 reps — Foundational compound lift for overall lower body mass and strength. Maintain upright torso, controlled depth, and braced core.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/calfraises.jpg">
+            <div class="workout-info">
+              <h5>Calf Raises</h5>
+              <p>4 sets of 15–20 reps — Isolation exercise for gastrocnemius and soleus. Pause at the top and control the descent for maximal contraction.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/dumbel lunges.jpg">
+            <div class="workout-info">
+              <h5>Dumbbell Lunges</h5>
+              <p>4 sets of 10 reps — Unilateral exercise enhancing quad and glute strength while improving balance and coordination. Step long enough to maintain knee safety.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/dumbel squats.jpg">
+            <div class="workout-info">
+              <h5>Dumbbell Squats</h5>
+              <p>4 sets of 10 reps — Strengthens quads, glutes, and hamstrings. Focus on controlled tempo and full range of motion for hypertrophy.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/front squats.jpg">
+            <div class="workout-info">
+              <h5>Front Squats</h5>
+              <p>4 sets of 10 reps — Emphasizes quads and core stability. Keep elbows high and torso upright to prevent forward lean.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/hack squat.jpg">
+            <div class="workout-info">
+              <h5>Hack Squats</h5>
+              <p>4 sets of 10 reps — Machine-based squat variation targeting quads and glutes with reduced lower back stress. Maintain controlled motion and avoid locking knees.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/hip adduction.jpg">
+            <div class="workout-info">
+              <h5>Hip Adduction</h5>
+              <p>4 sets of 12 reps — Isolation movement for inner thigh (adductors). Focus on slow eccentric phase and maximal contraction.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/leg extension.jpg">
+            <div class="workout-info">
+              <h5>Leg Extension</h5>
+              <p>4 sets of 12 reps — Isolation for quadriceps. Adjust pad and weight to maintain safe knee alignment while maximizing contraction.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/leg lunges.jpg">
+            <div class="workout-info">
+              <h5>Walking Lunges</h5>
+              <p>4 sets of 12 steps per leg — Enhances functional strength, hip mobility, and unilateral leg stability. Maintain upright posture.</p>
+            </div>
+          </div>
+
+          <div class="workout-item">
+            <img src="pictures/side lunges.jpg">
+            <div class="workout-info">
+              <h5>Side Lunges</h5>
+              <p>4 sets of 10 reps per leg — Targets adductors, glutes, and quads while improving lateral mobility and balance.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= CORE STABILITY MODAL ================= -->
+<div class="modal fade" id="coreModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Core Stability Workouts</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="workout-list">
+          <h4 class="muscle-group">Upper Abs</h4>
+          <div class="workout-item"><img src="pictures/abs curl.jpg"><div class="workout-info"><h5>Abs Curl</h5><p>2-3 sets of 12 reps — Classic crunch movement targeting rectus abdominis. Maintain controlled tempo and avoid neck strain.</p></div></div>
+          <div class="workout-item"><img src="pictures/abs wheel roll out.jpg"><div class="workout-info"><h5>Ab Wheel Rollout</h5><p>2-3 sets of 12 reps — Advanced anti-extension exercise activating deep core muscles. Keep core braced and avoid lower back sag.</p></div></div>
+          <div class="workout-item"><img src="pictures/bicycle crunches.jpg"><div class="workout-info"><h5>Bicycle Crunches</h5><p>4 sets of 30 reps per side — Oblique-focused abdominal exercise. Slow controlled movement maximizes engagement.</p></div></div>
+
+          <h4 class="muscle-group">Lower Abs</h4>
+          <div class="workout-item"><img src="pictures/lying-leg-raise.jpg"><div class="workout-info"><h5>Lying Leg Raises</h5><p>2-3 sets of 12 reps — Targets lower rectus abdominis and hip flexors. Control descent to avoid back strain.</p></div></div>
+          <div class="workout-item"><img src="pictures/hip thrust.jpg"><div class="workout-info"><h5>Hip Thrust</h5><p>2-3 sets of 12 reps — Strengthens lower abs and hip flexors. Maintain controlled range of motion.</p></div></div>
+
+          <h4 class="muscle-group">Obliques</h4>
+          <div class="workout-item"><img src="pictures/russian twist.jpg"><div class="workout-info"><h5>Russian Twists</h5><p>2-3 sets of 15 reps per side — Rotational exercise activating obliques. Maintain neutral spine and slow rotation.</p></div></div>
+          <div class="workout-item"><img src="pictures/side-crunch.jpg"><div class="workout-info"><h5>Side Crunch</h5><p>2-3 sets of 15 reps per side — Oblique isolation. Focus on contracting the side abs during the lift.</p></div></div>
+          <div class="workout-item"><img src="pictures/side-plank-leg-lift.jpg"><div class="workout-info"><h5>Side Plank Leg Lift</h5><p>2-3 sets of 60 sec reps — Anti-rotation core stabilization. Keep hips aligned and rotate slowly to maximize engagement.</p></div></div>
+
+          <h4 class="muscle-group">Full Core</h4>
+          <div class="workout-item"><img src="pictures/plank.jpg"><div class="workout-info"><h5>Plank</h5><p>2-3 sets of 60 seconds — Static core stabilization exercise. Engage abs, glutes, and back. Maintain straight line from head to heels.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="btn-container">
+    <a href="workouts.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Workouts</a>
+</div>
+<div class="bottom-nav">
+  <a href="index.html" ><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="workouts.html"class="active"><i class="fas fa-dumbbell"></i><span>Workouts</span></a>
+  <a href="about.html"><i class="fas fa-info-circle"></i><span>About</span></a>
+  <a href="contact.html"><i class="fas fa-envelope"></i><span>Contact</span></a>
+  <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a>
+</div>
+
+<footer>
+  <div>
+    <h4>Quick Links</h4>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="workouts.html">Workouts</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+  <div>
+    <h4>Contact Us</h4>
+    <ul>
+      <li><i class="fas fa-phone"></i> +63 912 345 6789</li>
+      <li><i class="fas fa-envelope"></i> workout@hub.com</li>
+        <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+      </ul>
+    </div>
+  <div class="footer-bottom">
+    © 2025 Workout Hub — All Rights Reserved
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

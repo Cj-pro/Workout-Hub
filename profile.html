@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Hub Profile</title>
+
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #333;
+      background-repeat:no-repeat; background-size:cover;
+      background-position:center center; background-attachment:fixed;
+    }
+
+    a {
+      text-decoration: none;
+      color: #1cb5e0;
+      transition: 0.3s;
+    }
+
+    a:hover {
+      color: #ffcc00;
+    }
+a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #ffcc00;
+  left: 0;
+  bottom: -2px; /* slightly below text */
+  transform: scaleX(0);
+  transform-origin: center; /* start from center */
+  transition: transform 0.3s ease;
+}
+
+a:hover::after {
+  transform: scaleX(1); /* expand fully */
+}
+
+    /* Header */
+    header { 
+      background: linear-gradient(90deg, #1cb5e0, #000851); 
+      color:#fff; padding:1rem 2rem; 
+      display:flex; justify-content:space-between; align-items:center; 
+    }
+    header h1 { font-size:1.8rem; }
+                .brand {
+      display:flex; align-items:center; gap:.6rem;
+    }
+    .brand h1{ font-size:1.05rem; margin:0; font-weight:700; letter-spacing:.2px; }
+        nav.desktop-nav a{ color:#fff; margin-left:1.1rem; font-weight:500; }
+    nav.desktop-nav a.active{ color:var(--gold); border-bottom:2px solid var(--gold); padding-bottom:.25rem; }
+        /* Collapsed mobile header icon group */
+    .header-right { display:flex; gap:.6rem; align-items:center; }
+    .header-right .icon-btn{ color:#fff; font-size:1.05rem; }
+    nav a { margin-left:1.5rem; font-weight:500; color:#fff; }
+    nav a.active { color:#ffcc00; font-weight:bold; border-bottom:2px solid #ffcc00; }
+
+    h1, p { text-align: center; font-weight: bold; }
+
+    /* Profile Section */
+    #profile {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .profile-wrapper {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      cursor: pointer;
+    }
+
+    .profile-pic {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 4px solid #2ecc71;
+      object-fit: cover;
+    }
+
+    .upload-overlay {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: #2ecc71;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      border: 3px solid white;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .profile-wrapper:hover .upload-overlay { background: #25a85a; }
+    .profile-wrapper:hover .profile-pic { opacity: 0.9; }
+
+    /* Content Boxes */
+#about, #goals {
+  background: rgba(255, 255, 255, 0.5); /* semi-transparent */
+  backdrop-filter: blur(2px);           /* glass blur effect */
+  padding: 2rem 5%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  color: #0b0b0b;
+  margin: 1rem auto;                    /* centered with spacing */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+#about:hover, #goals:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 25px rgba(0,0,0,0.25);
+}
+
+
+    /* Logout Button */
+    .logout-btn {
+      display: block;
+      margin: 2rem auto;
+      padding: 0.8rem 2rem;
+      background:#f60303 ;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .logout-btn:hover {
+      background: #ff4224;
+    }
+
+    /* Logout Modal */
+    .logout-modal {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logout-box {
+      background: #fff;
+      padding: 2.5rem 3rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 7px 20px rgba(0,0,0,0.2);
+      animation: pop 0.25s ease;
+    }
+#logoutLink {
+  display: none;
+}
+
+
+
+    @keyframes pop {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .logout-box h2 { color: #000851; margin-bottom: 1rem; }
+    .logout-box p { margin-bottom: 2rem; }
+
+    .logout-box button {
+      padding: 0.7rem 2rem;
+      background: #000851;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+
+    footer {
+      background: linear-gradient(90deg, #1cb5e0, #000851);
+      color: #fff;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      text-align: left;
+    }
+
+    footer h4 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #ffcc00;
+    }
+
+    footer ul {
+      list-style: none;
+    }
+
+    footer ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    footer ul li a {
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    footer ul li a:hover {
+      color: #ffcc00;
+    }
+
+    .footer-bottom {
+      width: 100%;
+      text-align: center;
+      margin-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+
+/* Mobile bottom nav */
+.bottom-nav { 
+    display:none; /* HIDDEN on desktop screens */
+}
+
+@media (max-width:768px) {
+    /* 1. Hide the top desktop navigation */
+    header nav { 
+        display:none; 
+    }
+
+    /* 2. Show the bottom mobile navigation */
+    .bottom-nav {
+        display:flex; /* SHOW the bottom nav */
+        justify-content:space-around; 
+        align-items:center;
+        position:fixed; 
+        bottom:0; 
+        left:0; 
+        width:100%;
+        background: linear-gradient(90deg, #1cb5e0, #000851); 
+        padding:0.6rem 0;
+        box-shadow:0 -2px 5px rgba(0,0,0,0.2); 
+        z-index:9999;
+    }
+
+    /* 3. Add space at the bottom of the body so content isn't covered by the fixed nav */
+    body { 
+        padding-bottom:60px; 
+    }
+
+    /* Other styles for the bottom nav appearance: */
+    .bottom-nav a { 
+        color:#fff; 
+        text-align:center; 
+        font-size:0.85rem; 
+        flex:1; 
+    }
+    .bottom-nav a i { 
+        display:block; 
+        font-size:1.4rem; 
+        margin-bottom:0.2rem; 
+    }
+    .bottom-nav a.active, .bottom-nav a:hover { 
+        color:#ffcc00; 
+    }
+}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="container-max" role="banner">
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path fill="#fff" d="M12 2L3 7v6c0 5 3.9 9.3 9 9.9 5.1-.6 9-4.9 9-9.9V7l-9-5z"></path>
+      </svg>
+      <h1>Workout Hub</h1>
+    </div>
+
+    <nav class="desktop-nav" role="navigation" aria-label="main navigation">
+      <a href="index.html"  aria-current="page">Home</a>
+      <a href="workouts.html">Workouts</a>
+      <a href="about.html">About</a>
+      <a href="contact.html"class="active">Contact</a>
+      <a href="#" id="logoutLink">Logout</a>
+      <a href="profile.html" class="active"><i class="fas fa-user"></i></a>
+    </nav>
+
+  </header>
+
+<h1>My Workout Hub Profile</h1>
+<p>Your Fitness Journey Starts Here</p>
+
+<!-- PROFILE -->
+<section id="profile">
+  <div class="profile-wrapper">
+    <img id="profileImage" src="profile.jpg" class="profile-pic">
+    <div class="upload-overlay"><i class="fas fa-camera"></i></div>
+  </div>
+  <input type="file" id="uploadInput" accept="image/*" style="display:none;">
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2>About Me</h2>
+  <p>Welcome to my Workout Hub Profile! This page shows my personal fitness goals and journey.</p>
+</section>
+
+<!-- GOALS -->
+<section id="goals">
+  <h2>My Workout Goals</h2>
+  <ul>
+    <li>Build lean muscle and get stronger</li>
+    <li>Lose body fat and improve overall shape</li>
+    <li>Increase stamina for daily activities</li>
+    <li>Stay consistent with weekly workouts</li>
+    <li>Live a healthier and more active lifestyle</li>
+  </ul>
+</section>
+
+<!-- LOGOUT BUTTON -->
+<button class="logout-btn" id="openLogout">Logout</button>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-modal" id="logoutModal">
+  <div class="logout-box">
+    <h2>You Have Been Logged Out</h2>
+    <p>Thank you for visiting Workout Hub.</p>
+    <button id="goLogin">Go to Login Page</button>
+  </div>
+</div>
+<div class="bottom-nav">
+  <a href="index.html" ><i class="fas fa-home"></i><span>Home</span></a>
+  <a href="workouts.html"><i class="fas fa-dumbbell"></i><span>Workouts</span></a>
+  <a href="about.html"><i class="fas fa-info-circle"></i><span>About</span></a>
+  <a href="contact.html"><i class="fas fa-envelope"></i><span>Contact</span></a>
+  <a href="profile.html"class="active"><i class="fas fa-user"></i><span>Profile</span></a>
+</div>
+
+  <footer>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="workouts.html"><i class="fas fa-dumbbell"></i> Workouts</a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><i class="fas fa-phone"></i> +63 912 345 6789</li>
+        <li><i class="fas fa-envelope"></i> workout@hub.com</li>
+        <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 Workout Hub — All Rights Reserved
+    </div>
+  </footer>
+
+<script>
+  /* PROFILE UPLOAD */
+  const uploadInput = document.getElementById("uploadInput");
+  const profileImage = document.getElementById("profileImage");
+  const profileWrapper = document.querySelector(".profile-wrapper");
+
+  const savedImage = localStorage.getItem("profileImage");
+  if (savedImage) profileImage.src = savedImage;
+
+  profileWrapper.onclick = () => uploadInput.click();
+
+  uploadInput.onchange = function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      profileImage.src = e.target.result;
+      localStorage.setItem("profileImage", e.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  /* LOGOUT MODAL */
+  const logoutModal = document.getElementById("logoutModal");
+  const openLogout = document.getElementById("openLogout");
+  const logoutLink = document.getElementById("logoutLink");
+  const goLogin = document.getElementById("goLogin");
+
+  openLogout.onclick = logoutLink.onclick = function () {
+    logoutModal.style.display = "flex";
+    localStorage.removeItem("rememberedUser");
+  };
+
+  goLogin.onclick = () => window.location.href = "login2.html";
+</script>
+
+</body>
+</html>
